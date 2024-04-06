@@ -263,7 +263,7 @@ T5:Toggle("Auto vote",false,function(value)
       game:GetService("ReplicatedStorage")["Remotes"]["CastVote"]:FireServer(var.map.name)
     end
 end)
-
+--workspace.CurrentCamera.CameraSubject = viewing.Character
 if player.self.Name == "Rivanda_Cheater" then
 local T99 = wndw:Tab("Fun",true)
 
@@ -286,14 +286,38 @@ T99:Button("Go to sheriff",function()
           end
       end)
 end)
-  
+
+T99:Toggle("Spy monster",false,function(value)
+	if value == true then
+		getPlayer(function(plr)
+			if getRole(plr) == "Monster" then
+				workspace.CurrentCamera.CameraSubject = plr.Character
+			end
+		end)
+	else
+		workspace.CurrentCamera.CameraSubject = player.self.Character
+	end
+end)
+
+T99:Toggle("Spy sheriff",false,function(value)
+	if value == true then
+		getPlayer(function(plr)
+			if getRole(plr) == "Sheriff" then
+				workspace.CurrentCamera.CameraSubject = plr.Character
+			end
+		end)
+	else
+		workspace.CurrentCamera.CameraSubject = player.self.Character
+	end
+end)
+	
 end
 
-function RandomNumberRange(a)
+local function RandomNumberRange(a)
 	return math.random(-a * 100,a * 100) / 100
 end
 
-function RandomVectorRange(a,b,c)
+local function RandomVectorRange(a,b,c)
 	return Vector3.new(RandomNumberRange(a),RandomNumberRange(b),RandomNumberRange(c))
 end
 
@@ -330,5 +354,5 @@ local XDDDDDD = hookmetamethod(game,"__index",newcclosure(function(o,key)
           end
         end
       end
-      return XDDDDDD(self, key)
+      return XDDDDDD(o,key)
 end))
