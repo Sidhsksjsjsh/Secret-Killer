@@ -329,7 +329,7 @@ lib:runtime(function()
 		DesyncTypes[2] = player.self.Character.HumanoidRootPart.AssemblyLinearVelocity
 
 		player.self.Character.HumanoidRootPart.CFrame = player.self.Character.HumanoidRootPart.CFrame * CFrame.new(Vector3.new(0,0,0))
-		player.self.Character.HumanoidRootPart.CFrame = player.self.Character.HumanoidRootPart.CFrame * CFrame.Angles(math.rad(RandomNumberRange(180)),math.rad(RandomNumberRange(180)),math.rad(RandomNumberRange(180)))
+		--player.self.Character.HumanoidRootPart.CFrame = player.self.Character.HumanoidRootPart.CFrame * CFrame.Angles(math.rad(RandomNumberRange(180)),math.rad(RandomNumberRange(180)),math.rad(RandomNumberRange(180)))
 
 		player.self.Character.HumanoidRootPart.CFrame = player.self.Character.HumanoidRootPart.CFrame
 
