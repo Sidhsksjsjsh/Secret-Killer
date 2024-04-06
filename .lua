@@ -90,10 +90,11 @@ local function makeESP()
   getBackpack(function(tool,v)
       asyncChildren(v.Character,function(i)
         if i.Name == "X-RAY" then
-            i:Destroy()
+            i["X-RAY"]:Destroy()
         end
       end)
-    
+
+      if v.Name ~= player.self.Name then
       if getRole(v) == "Monster" then
         local esp = Instance.new("Highlight")
         esp.Name = "X-RAY"
@@ -126,6 +127,7 @@ local function makeESP()
         esp.Adornee = v.Character
         esp.Parent = v.Character
         esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+      end
       end
   end)
 end
@@ -175,7 +177,7 @@ T2:Toggle("Auto shoot monster",false,function(value)
       if var.sher == false then break end
       if getRole(player.self) == "Sheriff" then
           getPlayer(function(plr)
-              if getEquippedTool(player.self) == "Gun" then
+              if getRole(plr) == "Monster" then
                 game:GetService("ReplicatedStorage")["Remotes"]["ShootGun"]:FireServer(plr.Character.HumanoidRootPart.Position,player.self.Character.HumanoidRootPart.Position)
               end
           end)
@@ -210,9 +212,7 @@ T3:Toggle("Auto throw claw",false,function(value)
       if var.sher == false then break end
       if getRole(player.self) == "Monster" then
           getPlayer(function(plr)
-              if getEquippedTool(player.self) == "Monster" then
-                game:GetService("ReplicatedStorage")["Remotes"]["MonsterClawThrow"]:FireServer(plr.Character.HumanoidRootPart.Position,player.self.Character.HumanoidRootPart.Position)
-              end
+              game:GetService("ReplicatedStorage")["Remotes"]["MonsterClawThrow"]:FireServer(plr.Character.HumanoidRootPart.Position,player.self.Character.HumanoidRootPart.Position)
           end)
       else
         lib:notify(lib:ColorFonts("Cannot throw claws, no monster tool detected. Missing-Role : Monster","Red"),10)
