@@ -35,6 +35,24 @@ local var = {
 
 lib:AddTable(game:GetService("ReplicatedStorage").Storage.Crates,var.crate.table)
 
+local function getEquippedTool(plr)
+    local char = plr.Character
+    local polvus = char and char:FindFirstChildWhichIsA("Tool")
+    
+    if polvus ~= nil then
+        return polvus.Name
+    end
+end
+
+local function getBackpackTool(plr)
+    local char = plr.Backpack
+    local polvus = char and char:FindFirstChildWhichIsA("Tool")
+    
+    if polvus ~= nil then
+        return polvus.Name
+    end
+end
+
 local function asyncChildren(path,funct)
   for i,v in pairs(path:GetChildren()) do
     funct(v)
@@ -61,7 +79,6 @@ local function getSelfToolFromBackpack(name)
         return true
       end
   end)
-  return false
 end
 --lib:TeleportMethod(mthd,str)
 
@@ -73,7 +90,7 @@ local function makeESP()
         end
       end)
     
-      if tool.Name == "Monster" then
+      if tool.Name == "Monster" or getEquippedTool(v) == "Monster" then
         local esp = Instance.new("Highlight")
         esp.Name = "X-RAY"
         esp.FillColor = Color3.new(1,0,0)
@@ -83,7 +100,8 @@ local function makeESP()
         esp.Adornee = v.Character
         esp.Parent = v.Character
         esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-      elseif tool.Name == "Gun" then
+      end
+      if tool.Name == "Gun" or getEquippedTool(v) == "Gun" then
         local esp = Instance.new("Highlight")
         esp.Name = "X-RAY"
         esp.FillColor = Color3.new(0,0,1)
@@ -93,7 +111,8 @@ local function makeESP()
         esp.Adornee = v.Character
         esp.Parent = v.Character
         esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-      else
+      end
+      if tool.Name ~= "Gun" or getEquippedTool(v) ~= "Gun" or tool.Name ~= "Monster" or getEquippedTool(v) ~= "Monster" then
         local esp = Instance.new("Highlight")
         esp.Name = "X-RAY"
         esp.FillColor = Color3.new(0,1,0)
@@ -150,7 +169,7 @@ T2:Toggle("Auto shoot monster",false,function(value)
     var.sher = value
     while wait() do
       if var.sher == false then break end
-      if getSelfToolFromBackpack("Gun") == true then
+      if getEquippedTool(player.self) == "Gun" then
           getBackpack(function(tool,plr)
               if tool.Name == "Gun" then
                 game:GetService("ReplicatedStorage")["Remotes"]["ShootGun"]:FireServer(plr.Character.HumanoidRootPart.Position,player.self.Character.HumanoidRootPart.Position)
@@ -174,7 +193,7 @@ T3:Toggle("Teleport to all players",false,function(value)
 end)
 
 T3:Toggle("Monster transform",false,function(value)
-    if getSelfToolFromBackpack("Monster") == true then
+    if getSelfToolFromBackpack("Monster") == true or getEquippedTool(player.self) == "Monster" then
       game:GetService("ReplicatedStorage")["Remotes"]["MorphToMonster"]:FireServer(value)
     else
       lib:notify(lib:ColorFonts("Cannot transform, no monster tool detected. Missing-Role : Monster","Red"),10)
@@ -185,7 +204,7 @@ T3:Toggle("Auto throw claw",false,function(value)
     var.mons = value
     while wait() do
       if var.sher == false then break end
-      if getSelfToolFromBackpack("Monster") == true then
+      if getSelfToolFromBackpack("Monster") == true or getEquippedTool(player.self) == "Monster" then
           getBackpack(function(tool,plr)
               if tool.Name == "Monster" then
                 game:GetService("ReplicatedStorage")["Remotes"]["MonsterClawThrow"]:FireServer(plr.Character.HumanoidRootPart.Position,player.self.Character.HumanoidRootPart.Position)
