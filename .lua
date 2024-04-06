@@ -1,7 +1,7 @@
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Sidhsksjsjsh/VAPE-UI-MODDED/main/.lua"))()
 local wndw = lib:Window("VIP Turtle Hub V4")
 local T1 = wndw:Tab("Main")
-local T2 = wndw:Tab("Sherrif")
+local T2 = wndw:Tab("Sheriff")
 local T3 = wndw:Tab("Monster")
 local T4 = wndw:Tab("Crate")
 local T5 = wndw:Tab("Vote")
@@ -105,7 +105,7 @@ local function makeESP()
         esp.Parent = v.Character
         esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
       end
-      if getRole(v) == "Sherrif" then
+      if getRole(v) == "Sheriff" then
         local esp = Instance.new("Highlight")
         esp.Name = "X-RAY"
         esp.FillColor = Color3.new(0,0,1)
@@ -173,7 +173,7 @@ T2:Toggle("Auto shoot monster",false,function(value)
     var.sher = value
     while wait() do
       if var.sher == false then break end
-      if getRole(player.self) == "Sherrif" then
+      if getRole(player.self) == "Sheriff" then
           getPlayer(function(plr)
               if getEquippedTool(player.self) == "Gun" then
                 game:GetService("ReplicatedStorage")["Remotes"]["ShootGun"]:FireServer(plr.Character.HumanoidRootPart.Position,player.self.Character.HumanoidRootPart.Position)
@@ -209,8 +209,8 @@ T3:Toggle("Auto throw claw",false,function(value)
     while wait() do
       if var.sher == false then break end
       if getRole(player.self) == "Monster" then
-          getBackpack(function(tool,plr)
-              if tool.Name == "Monster" then
+          getPlayer(function(plr)
+              if getEquippedTool(player.self) == "Monster" then
                 game:GetService("ReplicatedStorage")["Remotes"]["MonsterClawThrow"]:FireServer(plr.Character.HumanoidRootPart.Position,player.self.Character.HumanoidRootPart.Position)
               end
           end)
