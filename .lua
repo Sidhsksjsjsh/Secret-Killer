@@ -29,7 +29,8 @@ local var = {
     name = "1",
     toggle = false
   },
-  safep = false
+  safep = false,
+  tp = false
 }
 
 lib:AddTable(game:GetService("ReplicatedStorage").Storage.Crates,var.crate.table)
@@ -66,16 +67,37 @@ end
 
 local function makeESP()
   getBackpack(function(tool,v)
-      if tool.Name == "
-      local esp = Instance.new("Highlight")
-      esp.Name = "X-RAY"
-      esp.FillColor = Color3.new(0,1,0)
-      esp.OutlineColor = Color3.new(1,1,1)
-      esp.FillTransparency = 0
-      esp.OutlineTransparency = 1
-      esp.Adornee = v.Character
-      esp.Parent = v.Character
-      esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+      if tool.Name == "Monster" then
+        local esp = Instance.new("Highlight")
+        esp.Name = "X-RAY"
+        esp.FillColor = Color3.new(1,0,0)
+        esp.OutlineColor = Color3.new(1,1,1)
+        esp.FillTransparency = 0
+        esp.OutlineTransparency = 1
+        esp.Adornee = v.Character
+        esp.Parent = v.Character
+        esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+      elseif tool.Name == "Gun" then
+        local esp = Instance.new("Highlight")
+        esp.Name = "X-RAY"
+        esp.FillColor = Color3.new(0,0,1)
+        esp.OutlineColor = Color3.new(1,1,1)
+        esp.FillTransparency = 0
+        esp.OutlineTransparency = 1
+        esp.Adornee = v.Character
+        esp.Parent = v.Character
+        esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+      else
+        local esp = Instance.new("Highlight")
+        esp.Name = "X-RAY"
+        esp.FillColor = Color3.new(0,1,0)
+        esp.OutlineColor = Color3.new(1,1,1)
+        esp.FillTransparency = 0
+        esp.OutlineTransparency = 1
+        esp.Adornee = v.Character
+        esp.Parent = v.Character
+        esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+      end
   end)
 end
 
@@ -128,6 +150,16 @@ T2:Toggle("Auto shoot monster",false,function(value)
         lib:notify(lib:ColorFonts("Cant shoot, no gun detected. Missing-Role : Sherrif","Red"),10)
         var.sher = false
       end
+    end
+end)
+
+T3:Toggle("Teleport to all players",false,function(value)
+    var.tp = value
+    while wait() do
+      if var.tp == false then break end
+      getPlayer(function(v)
+          lib:TeleportMethod("tp",v.Character.HumanoidRootPart.CFrame)
+      end)
     end
 end)
 
