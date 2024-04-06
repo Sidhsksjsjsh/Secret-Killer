@@ -12,6 +12,10 @@ local player = {
   server = game:GetService("Players")
 }
 
+local function getRole(plr)
+      return plr:GetAttribute("role")
+end
+
 local var = {
   spin = false,
   coin1 = false,
@@ -90,7 +94,7 @@ local function makeESP()
         end
       end)
     
-      if tool.Name == "Monster" or getEquippedTool(v) == "Monster" then
+      if getRole(v) == "Monster" then
         local esp = Instance.new("Highlight")
         esp.Name = "X-RAY"
         esp.FillColor = Color3.new(1,0,0)
@@ -101,7 +105,7 @@ local function makeESP()
         esp.Parent = v.Character
         esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
       end
-      if tool.Name == "Gun" or getEquippedTool(v) == "Gun" then
+      if getRole(v) == "Sherrif" then
         local esp = Instance.new("Highlight")
         esp.Name = "X-RAY"
         esp.FillColor = Color3.new(0,0,1)
@@ -112,7 +116,7 @@ local function makeESP()
         esp.Parent = v.Character
         esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
       end
-      if tool.Name ~= "Gun" or getEquippedTool(v) ~= "Gun" or tool.Name ~= "Monster" or getEquippedTool(v) ~= "Monster" then
+      if getRole(v) == "Innocent" then
         local esp = Instance.new("Highlight")
         esp.Name = "X-RAY"
         esp.FillColor = Color3.new(0,1,0)
@@ -130,7 +134,7 @@ T1:Toggle("Auto tp to safe place [ Innocent ]",false,function(value)
     var.safep = value
     while wait() do
       if var.safep == false then break end
-      if getSelfToolFromBackpack("Gun") == false or getSelfToolFromBackpack("Monster") == false or getSelfToolFromBackpack("Gun") ~= true or getSelfToolFromBackpack("Monster") ~= true then
+      if getRole(player.self) == "Innocent" then
         lib:TeleportMethod("tp",CFrame.new(-362,47,-9219))
       end
     end
@@ -150,7 +154,7 @@ T1:Toggle("Auto collect coins",false,function(value)
       if var.coin1 == false then break end
       asyncChildren(workspace.CoinHolder,function(a)
           asyncChildren(a,function(v)
-              game:GetService("ReplicatedStorage")["Remotes"]["CollectCoin"]:FireServer(v.Name,a.Name)
+              game:GetService("ReplicatedStorage")["Remotes"]["CollectCoin"]:FireServer(v.Name,"4")
           end)
       end)
     end
@@ -169,9 +173,9 @@ T2:Toggle("Auto shoot monster",false,function(value)
     var.sher = value
     while wait() do
       if var.sher == false then break end
-      if getEquippedTool(player.self) == "Gun" then
-          getBackpack(function(tool,plr)
-              if tool.Name == "Gun" then
+      if getRole(player.self) == "Sherrif" then
+          getPlayer(function(plr)
+              if getEquippedTool(player.self) == "Gun" then
                 game:GetService("ReplicatedStorage")["Remotes"]["ShootGun"]:FireServer(plr.Character.HumanoidRootPart.Position,player.self.Character.HumanoidRootPart.Position)
               end
           end)
@@ -193,7 +197,7 @@ T3:Toggle("Teleport to all players",false,function(value)
 end)
 
 T3:Toggle("Monster transform",false,function(value)
-    if getSelfToolFromBackpack("Monster") == true or getEquippedTool(player.self) == "Monster" then
+    if getRole(player.self) == "Monster" then
       game:GetService("ReplicatedStorage")["Remotes"]["MorphToMonster"]:FireServer(value)
     else
       lib:notify(lib:ColorFonts("Cannot transform, no monster tool detected. Missing-Role : Monster","Red"),10)
@@ -204,7 +208,7 @@ T3:Toggle("Auto throw claw",false,function(value)
     var.mons = value
     while wait() do
       if var.sher == false then break end
-      if getSelfToolFromBackpack("Monster") == true or getEquippedTool(player.self) == "Monster" then
+      if getRole(player.self) == "Monster" then
           getBackpack(function(tool,plr)
               if tool.Name == "Monster" then
                 game:GetService("ReplicatedStorage")["Remotes"]["MonsterClawThrow"]:FireServer(plr.Character.HumanoidRootPart.Position,player.self.Character.HumanoidRootPart.Position)
@@ -221,7 +225,7 @@ T3:Toggle("Auto use power",false,function(value)
     var.monspower = value
     while wait() do
       if var.monspower == false then break end
-      if getSelfToolFromBackpack("Monster") == true then
+      if getRole(player.self) == "Monster" then
         game:GetService("ReplicatedStorage")["Remotes"]["UsePower"]:FireServer()
       else
         lib:notify(lib:ColorFonts("Cannot use power, no monster tool detected. Missing-Role : Monster","Red"),10)
