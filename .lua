@@ -28,7 +28,8 @@ local var = {
     table = {"1","2","3"},
     name = "1",
     toggle = false
-  }
+  },
+  safep = false
 }
 
 lib:AddTable(game:GetService("ReplicatedStorage").Storage.Crates,var.crate.table)
@@ -61,6 +62,32 @@ local function getSelfToolFromBackpack(name)
   end)
   return false
 end
+--lib:TeleportMethod(mthd,str)
+
+local function makeESP()
+  getBackpack(function(tool,v)
+      if tool.Name == "
+      local esp = Instance.new("Highlight")
+      esp.Name = "X-RAY"
+      esp.FillColor = Color3.new(0,1,0)
+      esp.OutlineColor = Color3.new(1,1,1)
+      esp.FillTransparency = 0
+      esp.OutlineTransparency = 1
+      esp.Adornee = v.Character
+      esp.Parent = v.Character
+      esp.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+  end)
+end
+
+T1:Toggle("Auto tp to safe place [ Innocent ]",false,function(value)
+    var.safep = value
+    while wait() do
+      if var.safep == false then break end
+      if getSelfToolFromBackpack("Gun") == false or getSelfToolFromBackpack("Monster") == false or getSelfToolFromBackpack("Gun") ~= true or getSelfToolFromBackpack("Monster") ~= true then
+        lib:TeleportMethod("tp",CFrame.new(-362,47,-9219))
+      end
+    end
+end)
 
 T1:Toggle("Auto spin",false,function(value)
     var.spin = value
