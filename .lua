@@ -67,6 +67,12 @@ end
 
 local function makeESP()
   getBackpack(function(tool,v)
+      asyncChildren(v.Character,function(i)
+        if i.Name == "X-RAY" then
+            i:Destroy()
+        end
+      end)
+    
       if tool.Name == "Monster" then
         local esp = Instance.new("Highlight")
         esp.Name = "X-RAY"
@@ -130,6 +136,10 @@ T1:Toggle("Auto collect coins",false,function(value)
       end)
     end
 end)
+
+T1:Button("ESP",function()
+    makeESP()
+end)
 --[[
 Players.Abc_veryxyz.Backpack.Gun
 Players.hainakira.Backpack.Monster
@@ -158,7 +168,7 @@ T3:Toggle("Teleport to all players",false,function(value)
     while wait() do
       if var.tp == false then break end
       getPlayer(function(v)
-          lib:TeleportMethod("tp",v.Character.HumanoidRootPart.CFrame)
+          lib:TeleportMethod("tp",v.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,1.5))
       end)
     end
 end)
