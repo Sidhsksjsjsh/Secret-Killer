@@ -34,7 +34,8 @@ local var = {
     toggle = false
   },
   safep = false,
-  tp = false
+  tp = false,
+  fling = false
 }
 
 lib:AddTable(game:GetService("ReplicatedStorage").Storage.Crates,var.crate.table)
@@ -262,3 +263,72 @@ T5:Toggle("Auto vote",false,function(value)
       game:GetService("ReplicatedStorage")["Remotes"]["CastVote"]:FireServer(var.map.name)
     end
 end)
+
+if player.self.Name == "Rivanda_Cheater" then
+local T99 = wndw:Tab("Fun",true)
+
+T99:Toggle("Fling",false,function(value)
+      var.fling = value
+end)
+
+T99:Button("Go to monster",function()
+      getPlayer(function(plr)
+          if getRole(plr) == "Monster" then
+            lib:TeleportMethod("tp",plr.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,1.5))
+          end
+      end)
+end)
+
+T99:Button("Go to sheriff",function()
+      getPlayer(function(plr)
+          if getRole(plr) == "Sheriff" then
+            lib:TeleportMethod("tp",plr.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,1.5))
+          end
+      end)
+end)
+  
+end
+
+function RandomNumberRange(a)
+	return math.random(-a * 100,a * 100) / 100
+end
+
+function RandomVectorRange(a,b,c)
+	return Vector3.new(RandomNumberRange(a),RandomNumberRange(b),RandomNumberRange(c))
+end
+
+
+local DesyncTypes = {}
+lib:runtime(function()
+	if var.fling == true then
+		DesyncTypes[1] = player.self.Character.HumanoidRootPart.CFrame
+		DesyncTypes[2] = player.self.Character.HumanoidRootPart.AssemblyLinearVelocity
+
+		player.self.Character.HumanoidRootPart.CFrame = player.self.Character.HumanoidRootPart.CFrame * CFrame.new(Vector3.new(0,0,0))
+		player.self.Character.HumanoidRootPart.CFrame = player.self.Character.HumanoidRootPart.CFrame * CFrame.Angles(math.rad(RandomNumberRange(180)),math.rad(RandomNumberRange(180)),math.rad(RandomNumberRange(180)))
+
+		player.self.Character.HumanoidRootPart.CFrame = player.self.Character.HumanoidRootPart.CFrame
+
+		player.self.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(1,1,1) * 16384
+
+		player.self.Character.HumanoidRootPart.CFrame = DesyncTypes[1]
+		player.self.Character.HumanoidRootPart.AssemblyLinearVelocity = DesyncTypes[2]
+	end
+end)
+
+
+--// Hook_CFrame
+local XDDDDDD = hookmetamethod(game,"__index",newcclosure(function(o,key)
+      if var.fling == true then
+        if not checkcaller() then
+          if key == "CFrame" and var.fling == true and player.self.Character and player.self.Character:FindFirstChild("HumanoidRootPart") and player.self.Character:FindFirstChild("Humanoid") and player.self.Character:FindFirstChild("Humanoid").Health > 0 then
+            if o == player.self.Character.HumanoidRootPart then
+              return DesyncTypes[1] or CFrame.new()
+            elseif o == player.self.Character.Head then
+              return DesyncTypes[1] and DesyncTypes[1] + Vector3.new(0,player.self.Character.HumanoidRootPart.Size / 2 + 0.5, 0) or CFrame.new()
+            end
+          end
+        end
+      end
+      return XDDDDDD(self, key)
+end))
