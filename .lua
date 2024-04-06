@@ -322,7 +322,7 @@ local function RandomVectorRange(a,b,c)
 end
 
 
-local DesyncTypes = {}
+--[[local DesyncTypes = {}
 lib:runtime(function()
 	if var.fling == true then
 		DesyncTypes[1] = player.self.Character.HumanoidRootPart.CFrame
@@ -356,3 +356,4 @@ local XDDDDDD = hookmetamethod(game,"__index",newcclosure(function(o,key)
       end
       return XDDDDDD(o,key)
 end))
+]]
